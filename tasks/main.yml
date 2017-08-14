@@ -1,0 +1,4 @@
+---
+- include: undercloud.yml
+
+- include: overcloud.yml

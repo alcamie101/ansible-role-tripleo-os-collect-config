@@ -1,0 +1,13 @@
+galaxy_info:
+  author: Graeme Gillies
+  description: Role to setup os-collect-config on TripleO Overcloud nodes
+  company: Red Hat
+
+  license: BSD
+
+  min_ansible_version: 2.3
+
+  platforms:
+    - name: CentOS
+      versions:
+        - 7

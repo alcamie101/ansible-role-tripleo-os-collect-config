@@ -1,0 +1,20 @@
+---
+- name: install python-heat-agent
+  yum:
+    name: python-heat-agent*
+
+- name: remove /usr/libexec/os-apply-config/templates/etc/os-collect-config.conf
+  file:
+    path: /usr/libexec/os-apply-config/templates/etc/os-collect-config.conf
+    state: absent
+
+- name: configure os-collect-config
+  template:
+    src: os-collect-config.conf.j2
+    dest: /etc/os-collect-config.conf
+
+- name: enable and start os-collect-config
+  service:
+    name: os-collect-config
+    state: restarted
+    enabled: true

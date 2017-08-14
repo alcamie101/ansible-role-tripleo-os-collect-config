@@ -1,0 +1,22 @@
+---
+- name: get deployed server stack id from undercloud
+  shell: |
+    {{ undercloud_creds_command }} && openstack stack resource list overcloud -n5 -f value -c resource_name -c stack_name | grep deployed-server | grep -e "overcloud-{{ tripleo_server_role }}-.*-{{ tripleo_server_node_index }}-" | cut -f2 -d ' '
+  register: deployed_stack_id
+  until: deployed_stack_id.stdout_lines|length == 1
+  retries: 100
+  delay: 10
+  delegate_to: "{{ undercloud_command_host }}"
+
+- name: get os-collect-config metadata url
+  shell: |
+    {{ undercloud_creds_command }} && openstack stack resource metadata "{{ deployed_stack_id.stdout }}" deployed-server | jq -r '.["os-collect-config"].request.metadata_url'
+  register: os_collect_config_metadata_url
+  until: os_collect_config_metadata_url.stdout_lines|length == 1
+  retries: 100
+  delay: 10
+  delegate_to: "{{ undercloud_command_host }}"
+
+- name: set fact os_collect_config_metadata_url
+  set_fact:
+    os_collect_config_metadata_url: "{{ os_collect_config_metadata_url.stdout }}"

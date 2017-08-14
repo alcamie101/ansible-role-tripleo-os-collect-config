@@ -1,0 +1,3 @@
+---
+undercloud_command_host: "{{ groups['undercloud'][0] }}"
+undercloud_creds_command: "source /home/stack/stackrc"
